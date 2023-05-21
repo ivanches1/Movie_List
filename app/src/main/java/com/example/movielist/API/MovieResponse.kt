@@ -5,9 +5,9 @@ data class MovieResponse(
 )
 
 data class Movie(
-    val externalId: ExternalId,
+    @Transient val externalId: ExternalId,
     val rating: Rating,
-    val votes: Votes,
+    @Transient val votes: Votes,
     val movieLength: Int,
     val id: Int,
     val type: String,
@@ -15,14 +15,14 @@ data class Movie(
     val description: String,
     val year: Int,
     val poster: Poster,
-    val genres: List<Genre>,
-    val countries: List<Country>,
+    @Transient val genres: List<Genre>,
+    @Transient val countries: List<Country>,
     val alternativeName: String?,
     val enName: String?,
     val names: List<Name>,
     val shortDescription: String,
     val logo: Logo,
-    val watchability: Watchability
+    @Transient val watchability: Watchability
 )
 
 data class ExternalId(

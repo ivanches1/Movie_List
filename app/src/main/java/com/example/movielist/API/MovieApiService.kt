@@ -3,11 +3,18 @@ package com.example.movielist.API
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Headers
+import retrofit2.http.Query
 
 interface MovieApiService {
     @Headers(
         "X-API-KEY: JAVP002-038MAVB-NSKCDGB-GC3XHT9"
     )
-    @GET("movie?page=1&limit=20")
-    fun getPhotos(): Call<MovieResponse>
+    @GET("v1.3/movie?page=1&limit=20")
+    fun getMovies(): Call<MovieResponse>
+
+    @Headers(
+        "X-API-KEY: JAVP002-038MAVB-NSKCDGB-GC3XHT9"
+    )
+    @GET("v1.3/movie?page=1&limit=10")
+    fun searchMovies(@Query("names.name") query: String): Call<MovieResponse>
 }

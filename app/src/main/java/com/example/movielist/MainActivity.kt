@@ -3,6 +3,7 @@ package com.example.movielist
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.movielist.API.MovieApiInstance
 import com.example.movielist.API.MovieResponse
@@ -20,19 +21,43 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val context = this
+
         val service = MovieApiInstance.api
-        val call = service.getPhotos()
+        val call = service.getMovies()
+        fetchMovies(call)
+
+        binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                val call = if (query.isEmpty()) {
+                    service.getMovies()
+                } else {
+                    service.searchMovies(query)
+                }
+                fetchMovies(call)
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                if (newText.isEmpty()) {
+                    val call = service.getMovies()
+                    fetchMovies(call)
+                }
+                return true
+            }
+        })
+    }
+
+    private fun fetchMovies(call: Call<MovieResponse>) {
         call.enqueue(object : Callback<MovieResponse> {
             override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
                 if (response.isSuccessful) {
-                    val photoResponse = response.body()
-                    val photos = photoResponse?.docs
-                    photoAdapter = photos?.let { MovieAdapter(it) }!!
+                    val movieResponse = response.body()
+                    val movies = movieResponse?.docs
+                    photoAdapter = movies?.let { MovieAdapter(it) }!!
                     binding.recycle.adapter = photoAdapter
-                    binding.recycle.layoutManager = GridLayoutManager(context, 3)
+                    binding.recycle.layoutManager = GridLayoutManager(this@MainActivity, 3)
                 } else {
-                    Toast.makeText(applicationContext, "something wrong", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "Something went wrong", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -40,6 +65,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext, t.toString(), Toast.LENGTH_LONG).show()
             }
         })
-
     }
+
+
 }

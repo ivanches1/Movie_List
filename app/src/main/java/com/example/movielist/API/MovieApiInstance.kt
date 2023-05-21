@@ -7,7 +7,7 @@ object MovieApiInstance {
     private val retrofit by lazy {
         Retrofit
             .Builder()
-            .baseUrl("https://api.kinopoisk.dev/v1.3/")
+            .baseUrl("https://api.kinopoisk.dev/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
