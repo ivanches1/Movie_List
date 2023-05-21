@@ -16,7 +16,7 @@ import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
-    private lateinit var photoAdapter: MovieAdapter
+    private lateinit var movieAdapter: MovieAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -53,8 +53,8 @@ class MainActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val movieResponse = response.body()
                     val movies = movieResponse?.docs
-                    photoAdapter = movies?.let { MovieAdapter(it) }!!
-                    binding.recycle.adapter = photoAdapter
+                    movieAdapter = movies?.let { MovieAdapter(it, this@MainActivity) }!!
+                    binding.recycle.adapter = movieAdapter
                     binding.recycle.layoutManager = GridLayoutManager(this@MainActivity, 3)
                 } else {
                     Toast.makeText(applicationContext, "Something went wrong", Toast.LENGTH_SHORT).show()

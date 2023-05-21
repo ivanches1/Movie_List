@@ -15,7 +15,7 @@ data class Movie(
     val description: String,
     val year: Int,
     val poster: Poster,
-    @Transient val genres: List<Genre>,
+    val genres: List<Genre>,
     @Transient val countries: List<Country>,
     val alternativeName: String?,
     val enName: String?,

@@ -9,7 +9,7 @@ interface MovieApiService {
     @Headers(
         "X-API-KEY: JAVP002-038MAVB-NSKCDGB-GC3XHT9"
     )
-    @GET("v1.3/movie?page=1&limit=20")
+    @GET("v1.3/movie?page=1&limit=40")
     fun getMovies(): Call<MovieResponse>
 
     @Headers(
@@ -17,4 +17,11 @@ interface MovieApiService {
     )
     @GET("v1.3/movie?page=1&limit=10")
     fun searchMovies(@Query("names.name") query: String): Call<MovieResponse>
+
+    @Headers(
+        "X-API-KEY: JAVP002-038MAVB-NSKCDGB-GC3XHT9"
+    )
+    @GET("v1.3/movie")
+    fun getMovieById(@Query("id") query: String): Call<MovieResponse>
+
 }
