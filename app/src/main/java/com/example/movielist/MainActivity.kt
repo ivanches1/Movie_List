@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.movielist.API.MovieApiInstance
 import com.example.movielist.API.MovieResponse
 import com.example.movielist.Adapters.MovieAdapter
+import com.example.movielist.Database.MovieDao
+import com.example.movielist.Database.MoviesDatabase
 import com.example.movielist.databinding.ActivityMainBinding
 
 import retrofit2.Call
@@ -16,11 +18,15 @@ import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
+    private lateinit var movieDao: MovieDao
     private lateinit var movieAdapter: MovieAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val appDatabase = MoviesDatabase.getDatabase(applicationContext)
+        movieDao = appDatabase.movieDao()
 
         val service = MovieApiInstance.api
         val call = service.getMovies()

@@ -3,17 +3,21 @@ package com.example.movielist
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import androidx.recyclerview.widget.GridLayoutManager
 import com.example.movielist.API.MovieApiInstance
 import com.example.movielist.API.MovieResponse
-import com.example.movielist.Adapters.MovieAdapter
+import com.example.movielist.Database.Movie
+import com.example.movielist.Database.MovieDao
+import com.example.movielist.Database.MoviesDatabase
 import com.example.movielist.databinding.ActivityMovieInfoBinding
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class MovieInfoActivity : AppCompatActivity() {
+    private lateinit var movieDao: MovieDao
     lateinit var binding: ActivityMovieInfoBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +28,17 @@ class MovieInfoActivity : AppCompatActivity() {
         val service = MovieApiInstance.api
         val call = service.getMovieById(id.toString())
         fetchMovie(call)
+
+        binding.addToWatchList.setOnClickListener {
+            val appDatabase = MoviesDatabase.getDatabase(applicationContext)
+            movieDao = appDatabase.movieDao()
+
+            GlobalScope.launch {
+                movieDao.insertMovie(Movie(id))
+
+            }
+            Toast.makeText(this, "Фильм добавлен в избранные", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun fetchMovie(call: Call<MovieResponse>) {

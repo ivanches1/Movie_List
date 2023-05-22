@@ -32,7 +32,8 @@
         app:layout_constraintTop_toBottomOf="@id/name"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/year"
-        android:text="боевик, коммедия"/>
+        android:text="боевик, коммедия"
+        android:layout_marginTop="20dp"/>
 
     <TextView
         android:id="@+id/year"
@@ -68,6 +69,16 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="10dp"
         android:text="description"/>
+
+    <ImageButton
+        android:id="@+id/addToWatchList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/btn_star"
+
+        app:layout_constraintStart_toEndOf="@id/name"
+        app:layout_constraintTop_toTopOf="@id/name"
+        android:layout_marginLeft="15dp"/>
 
 
 
