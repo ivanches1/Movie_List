@@ -1,7 +1,10 @@
 package com.example.movielist
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
@@ -11,6 +14,8 @@ import com.example.movielist.Adapters.MovieAdapter
 import com.example.movielist.Database.MovieDao
 import com.example.movielist.Database.MoviesDatabase
 import com.example.movielist.databinding.ActivityMainBinding
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 import retrofit2.Call
 import retrofit2.Callback
@@ -71,6 +76,21 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext, t.toString(), Toast.LENGTH_LONG).show()
             }
         })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.fvButton -> {
+                val intent = Intent(this, MovieListActivity::class.java)
+                this.startActivity(intent)
+            }
+        }
+        return true
     }
 
 
