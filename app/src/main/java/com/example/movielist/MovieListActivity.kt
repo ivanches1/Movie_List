@@ -1,7 +1,12 @@
 package com.example.movielist
 
+import android.content.Context
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.OrientationEventListener
+import android.view.Surface
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.movielist.API.Movie
@@ -22,6 +27,7 @@ class MovieListActivity : AppCompatActivity() {
     lateinit var binding: ActivityMovieListBinding
     private lateinit var movieAdapter: MovieAdapter
     private lateinit var movieDao: MovieDao
+    private lateinit var orientationEventListener: OrientationEventListener
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMovieListBinding.inflate(layoutInflater)
@@ -45,7 +51,22 @@ class MovieListActivity : AppCompatActivity() {
                                 response.body()?.docs?.get(0)?.let { callStack.add(0, it) }
                                 movieAdapter = MovieAdapter(callStack, this@MovieListActivity)
                                 binding.recycle.adapter = movieAdapter
-                                binding.recycle.layoutManager = GridLayoutManager(this@MovieListActivity, 3)
+
+                                val display =
+                                    (this@MovieListActivity.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
+                                val rotation = display.rotation
+                                val config = this@MovieListActivity.resources.configuration
+
+                                if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) {
+                                    if (config.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                                        binding.recycle.layoutManager = GridLayoutManager(this@MovieListActivity, 3)
+                                    }
+                                } else if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) {
+                                    if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                                        binding.recycle.layoutManager = GridLayoutManager(this@MovieListActivity, 5)
+                                    }
+                                }
+
                             }
 
                         } else {
@@ -58,9 +79,36 @@ class MovieListActivity : AppCompatActivity() {
                     }
                 })
             }
-            runOnUiThread {
+        }
+        orientationEventListener = object : OrientationEventListener(this) {
+            override fun onOrientationChanged(orientation: Int) {
+                // Обрабатываем изменение ориентации экрана
+                if (orientation == ORIENTATION_UNKNOWN) {
+                    return
+                }
 
+                val rotation = windowManager.defaultDisplay.rotation
+                val newOrientation = when (rotation) {
+                    Surface.ROTATION_0 -> Configuration.ORIENTATION_PORTRAIT
+                    Surface.ROTATION_90 -> Configuration.ORIENTATION_LANDSCAPE
+                    Surface.ROTATION_180 -> Configuration.ORIENTATION_PORTRAIT
+                    Surface.ROTATION_270 -> Configuration.ORIENTATION_LANDSCAPE
+                    else -> Configuration.ORIENTATION_UNDEFINED
+                }
+
+                // Выполняем действия при изменении ориентации экрана
+                handleOrientationChange(newOrientation)
             }
+        }
+
+        // Запускаем слушатель событий
+        orientationEventListener.enable()
+    }
+    private fun handleOrientationChange(orientation: Int) {
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            binding.recycle.layoutManager = GridLayoutManager(this@MovieListActivity, 3)
+        } else {
+            binding.recycle.layoutManager = GridLayoutManager(this@MovieListActivity, 5)
         }
     }
 }
