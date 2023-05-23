@@ -4,6 +4,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object MovieApiInstance {
+    // Создаем экземпляр Retrofit с помощью ленивой инициализации (экземпляры создаются при обращении к ним в коде)
     private val retrofit by lazy {
         Retrofit
             .Builder()
@@ -12,6 +13,7 @@ object MovieApiInstance {
             .build()
     }
 
+    // Создаем экземпляр сервиса API с помощью ленивой инициализации
     val api: MovieApiService by lazy {
         retrofit.create(MovieApiService::class.java)
     }

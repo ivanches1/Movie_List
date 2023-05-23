@@ -1,5 +1,6 @@
 package com.example.movielist.API
 
+//создаем модель получаемых данных
 data class MovieResponse(
     val docs: List<Movie>
 )

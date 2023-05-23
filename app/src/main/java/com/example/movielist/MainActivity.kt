@@ -29,31 +29,39 @@ class MainActivity : AppCompatActivity() {
     private lateinit var movieDao: MovieDao
     private lateinit var movieAdapter: MovieAdapter
     private lateinit var orientationEventListener: OrientationEventListener
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Инициализация базы данных и Dao
         val appDatabase = MoviesDatabase.getDatabase(applicationContext)
         movieDao = appDatabase.movieDao()
 
+        // Инициализация Retrofit сервиса для работы с методами получения данных от API
         val service = MovieApiInstance.api
+
+        // Получение списка фильмов с API
         val call = service.getMovies()
         fetchMovies(call)
 
+        // Обработчик поискового запроса
         binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
+                // Выполнение запроса на основе введенного текста
                 val call = if (query.isEmpty()) {
                     service.getMovies()
                 } else {
                     service.searchMovies(query)
                 }
-                fetchMovies(call)
+                fetchMovies(call)//вызываем функцию которая устанавливает в список RecycleView полученные фильмы
                 return true
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                if (newText.isEmpty()) {
+                // Обновление списка фильмов при изменении текста поиска
+                if (newText.isEmpty()) {//при очистке запроса устанавливаются стандартные данные как при первом запуске
                     val call = service.getMovies()
                     fetchMovies(call)
                 }
@@ -62,18 +70,20 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    // Получение списка фильмов из API
     private fun fetchMovies(call: Call<MovieResponse>) {
         call.enqueue(object : Callback<MovieResponse> {
             override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
                 if (response.isSuccessful) {
                     val movieResponse = response.body()
                     val movies = movieResponse?.docs
+
+                    // Инициализация и привязка адаптера к RecyclerView
                     movieAdapter = movies?.let { MovieAdapter(it, this@MainActivity) }!!
                     binding.recycle.adapter = movieAdapter
 
-
-                    val display =
-                        (this@MainActivity.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
+                    // Определение ориентации экрана и установка соответствующего количества столбцов в RecyclerView
+                    val display = (this@MainActivity.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
                     val rotation = display.rotation
                     val config = this@MainActivity.resources.configuration
 
@@ -96,13 +106,14 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+        // Инициализация и запуск слушателя событий изменения ориентации экрана
         orientationEventListener = object : OrientationEventListener(this) {
             override fun onOrientationChanged(orientation: Int) {
-                // Обрабатываем изменение ориентации экрана
                 if (orientation == ORIENTATION_UNKNOWN) {
                     return
                 }
 
+                // Определение новой ориентации экрана
                 val rotation = windowManager.defaultDisplay.rotation
                 val newOrientation = when (rotation) {
                     Surface.ROTATION_0 -> Configuration.ORIENTATION_PORTRAIT
@@ -112,30 +123,41 @@ class MainActivity : AppCompatActivity() {
                     else -> Configuration.ORIENTATION_UNDEFINED
                 }
 
-                // Выполняем действия при изменении ориентации экрана
+                // Обработка изменения ориентации экрана
                 handleOrientationChange(newOrientation)
             }
         }
 
-        // Запускаем слушатель событий
         orientationEventListener.enable()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Инициализация меню
         menuInflater.inflate(R.menu.main_menu, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.fvButton -> {
+            R.id.movie_list_btn -> {
+                // Переход к активности со списком фильмов
                 val intent = Intent(this, MovieListActivity::class.java)
                 this.startActivity(intent)
+            }
+            R.id.clear_movie_list -> {
+                // Очистка списка фильмов
+                GlobalScope.launch {
+                    movieDao.deleteMovies()
+                }
+                Toast.makeText(this,
+                    "Вы успешно очистили список планируемых фильмов",
+                    Toast.LENGTH_SHORT).show()
             }
         }
         return true
     }
 
+    // Установка количества столбцов в RecyclerView в зависимости от ориентации экрана
     private fun handleOrientationChange(orientation: Int) {
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             binding.recycle.layoutManager = GridLayoutManager(this@MainActivity, 3)
@@ -143,5 +165,4 @@ class MainActivity : AppCompatActivity() {
             binding.recycle.layoutManager = GridLayoutManager(this@MainActivity, 5)
         }
     }
-
 }

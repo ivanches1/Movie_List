@@ -30,4 +30,13 @@
         app:layout_constraintTop_toBottomOf="@id/cameraTextView"
         app:layout_constraintStart_toStartOf="parent"/>
 
+    <ImageButton
+        android:id="@+id/delete"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:src="@android:drawable/ic_delete"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dateTextView"
+        android:visibility="gone"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
