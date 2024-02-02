@@ -6,9 +6,9 @@ import androidx.room.Query
 import com.example.movielist.domain.models.Movie
 
 interface DatabaseRepository {
-    fun getAllMovies(): List<Movie>
+    fun getAllMovies(): List<Int>
 
-    fun insertMovie(movie: Movie)
+    fun insertMovie(id: Int)
 
     fun deleteMovies()
 }

@@ -1,18 +1,20 @@
 package com.example.movielist.data
 
+import com.example.movielist.data.database.MovieDao
 import com.example.movielist.domain.DatabaseRepository
-import com.example.movielist.domain.models.Movie
 
-class DatabaseRepositoryImpl: DatabaseRepository {
-    override fun getAllMovies(): List<Movie> {
-        TODO("Not yet implemented")
+class DatabaseRepositoryImpl(private val dao: MovieDao): DatabaseRepository {
+    override fun getAllMovies(): List<Int> {
+        val list: MutableList<Int> = emptyList<Int>().toMutableList()
+        dao.getAllMovies().map { list.add(it.id) }
+        return list.toList()
     }
 
-    override fun insertMovie(movie: Movie) {
-        TODO("Not yet implemented")
+    override fun insertMovie(id: Int) {
+        dao.insertMovie(com.example.movielist.data.database.Movie(id))
     }
 
     override fun deleteMovies() {
-        TODO("Not yet implemented")
+        dao.deleteMovies()
     }
 }
