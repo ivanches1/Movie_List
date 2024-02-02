@@ -1,4 +1,4 @@
-package com.example.movielist
+package com.example.movielist.presentation.movie_list
 
 import android.content.Context
 import android.content.res.Configuration
@@ -9,12 +9,12 @@ import android.view.Surface
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.movielist.API.Movie
-import com.example.movielist.API.MovieApiInstance
-import com.example.movielist.API.MovieResponse
-import com.example.movielist.Adapters.MovieAdapter
-import com.example.movielist.Database.MovieDao
-import com.example.movielist.Database.MoviesDatabase
+import com.example.movielist.data.api.Movie
+import com.example.movielist.data.api.MovieApiInstance
+import com.example.movielist.data.api.MovieResponse
+import com.example.movielist.presentation.adapters.MovieAdapter
+import com.example.movielist.data.database.MovieDao
+import com.example.movielist.data.database.MoviesDatabase
 
 import com.example.movielist.databinding.ActivityMovieListBinding
 import kotlinx.coroutines.GlobalScope

@@ -1,4 +1,4 @@
-package com.example.movielist.API
+package com.example.movielist.data.api
 
 import retrofit2.Call
 import retrofit2.http.GET

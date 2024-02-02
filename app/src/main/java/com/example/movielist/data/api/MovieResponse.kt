@@ -1,4 +1,4 @@
-package com.example.movielist.API
+package com.example.movielist.data.api
 
 //создаем модель получаемых данных
 data class MovieResponse(

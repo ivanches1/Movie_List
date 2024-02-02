@@ -1,4 +1,4 @@
-package com.example.movielist
+package com.example.movielist.presentation.main
 
 import android.content.Context
 import android.content.Intent
@@ -9,20 +9,20 @@ import android.view.*
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.movielist.API.MovieApiInstance
-import com.example.movielist.API.MovieResponse
-import com.example.movielist.Adapters.MovieAdapter
-import com.example.movielist.Database.MovieDao
-import com.example.movielist.Database.MoviesDatabase
+import com.example.movielist.R
+import com.example.movielist.data.api.MovieApiInstance
+import com.example.movielist.data.api.MovieResponse
+import com.example.movielist.presentation.adapters.MovieAdapter
+import com.example.movielist.data.database.MovieDao
+import com.example.movielist.data.database.MoviesDatabase
 import com.example.movielist.databinding.ActivityMainBinding
-import com.squareup.picasso.Picasso
+import com.example.movielist.presentation.movie_list.MovieListActivity
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding

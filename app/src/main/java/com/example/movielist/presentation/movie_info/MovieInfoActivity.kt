@@ -1,13 +1,13 @@
-package com.example.movielist
+package com.example.movielist.presentation.movie_info
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import com.example.movielist.API.MovieApiInstance
-import com.example.movielist.API.MovieResponse
-import com.example.movielist.Database.Movie
-import com.example.movielist.Database.MovieDao
-import com.example.movielist.Database.MoviesDatabase
+import com.example.movielist.data.api.MovieApiInstance
+import com.example.movielist.data.api.MovieResponse
+import com.example.movielist.data.database.Movie
+import com.example.movielist.data.database.MovieDao
+import com.example.movielist.data.database.MoviesDatabase
 import com.example.movielist.databinding.ActivityMovieInfoBinding
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.GlobalScope
