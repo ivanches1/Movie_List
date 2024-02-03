@@ -51,7 +51,7 @@ class MainViewModel @Inject constructor(
                 deleteAllFavoriteMoviesUseCase.execute()
                 fetchMovies()
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(context, "Favorites books list successfully cleared", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "Все фильмы успешно удалены", Toast.LENGTH_LONG).show()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
