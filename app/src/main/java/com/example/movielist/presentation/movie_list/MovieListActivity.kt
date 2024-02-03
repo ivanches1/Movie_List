@@ -26,26 +26,25 @@ import retrofit2.Response
 class MovieListActivity : AppCompatActivity() {
     lateinit var binding: ActivityMovieListBinding
     private lateinit var movieAdapter: MovieAdapter
-    private lateinit var movieDao: MovieDao
-    private lateinit var orientationEventListener: OrientationEventListener
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMovieListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Инициализация базы данных и Dao
-        val appDatabase = MoviesDatabase.getDatabase(applicationContext)
-        movieDao = appDatabase.movieDao()
+//        // Инициализация базы данных и Dao
+//        val appDatabase = MoviesDatabase.getDatabase(applicationContext)
+//        movieDao = appDatabase.movieDao()
 
-        // Получение текущей ориентации экрана
-        val display =
-            (this@MovieListActivity.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
-        val rotation = display.rotation
-        val config = this@MovieListActivity.resources.configuration
-
-        // Стек для хранения фильмов
-        var callStack: MutableList<Movie> = emptyList<Movie>().toMutableList()
+//        // Получение текущей ориентации экрана
+//        val display =
+//            (this@MovieListActivity.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
+//        val rotation = display.rotation
+//        val config = this@MovieListActivity.resources.configuration
+//
+//        // Стек для хранения фильмов
+//        var callStack: MutableList<Movie> = emptyList<Movie>().toMutableList()
     }
 }
 

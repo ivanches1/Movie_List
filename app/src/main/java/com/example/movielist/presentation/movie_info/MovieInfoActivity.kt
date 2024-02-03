@@ -1,9 +1,11 @@
 package com.example.movielist.presentation.movie_info
 
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.movielist.data.api.MovieApiInstance
 import com.example.movielist.data.api.MovieResponse
 import com.example.movielist.data.database.Movie
@@ -61,6 +63,12 @@ class MovieInfoActivity : AppCompatActivity() {
 
         // Загрузка постера фильма с помощью библиотеки Picasso
         Picasso.get().load(movie.poster).into(binding.poster)
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        recreate()
     }
 
 }
