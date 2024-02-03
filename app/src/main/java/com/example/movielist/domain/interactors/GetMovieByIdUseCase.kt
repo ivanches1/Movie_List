@@ -1,9 +1,10 @@
 package com.example.movielist.domain.interactors
 
-import com.example.movielist.data.api.MovieApiService
+import com.example.movielist.domain.ApiRepository
+import com.example.movielist.domain.models.Movie
 
-class GetMovieByIdUseCase(private val apiService: MovieApiService) {
-    fun execute(query: String) {
-        apiService.getMovieById(query)
+class GetMovieByIdUseCase(private val repository: ApiRepository) {
+    fun execute(query: String): List<Movie> {
+        return repository.getMovieById(query)
     }
 }
