@@ -22,7 +22,7 @@ data class Movie(
     val enName: String?,
     val names: List<Name>,
     val shortDescription: String,
-    val logo: Logo,
+    val logo: Logo?,
     @Transient val watchability: Watchability
 )
 

@@ -5,9 +5,9 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.movielist.data.api.Movie
 import com.example.movielist.presentation.movie_info.MovieInfoActivity
 import com.example.movielist.databinding.ItemMovieBinding
+import com.example.movielist.domain.models.Movie
 import com.squareup.picasso.Picasso
 
 
@@ -48,7 +48,7 @@ class MovieAdapter(private val movies: List<Movie>, private val context: Context
             binding.cameraTextView.text = movie.name
             binding.dateTextView.text = movie.rating.kp.toString()
             Picasso.get()
-                .load(movie.poster.url)
+                .load(movie.poster)
                 .resize(400, 600) // Укажите требуемые размеры изображения
                 .centerCrop() // Центрировать и обрезать изображение, чтобы соответствовать указанным размерам
                 .into(binding.photoImageView)

@@ -39,106 +39,109 @@ class MovieListActivity : AppCompatActivity() {
         movieDao = appDatabase.movieDao()
 
         // Получение текущей ориентации экрана
-        val display = (this@MovieListActivity.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
+        val display =
+            (this@MovieListActivity.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
         val rotation = display.rotation
         val config = this@MovieListActivity.resources.configuration
 
         // Стек для хранения фильмов
         var callStack: MutableList<Movie> = emptyList<Movie>().toMutableList()
-
-        GlobalScope.launch {
-            // Получение всех фильмов из базы данных
-            val movies = movieDao.getAllMovies()
-
-            movies.forEach { elem ->
-                val call = MovieApiInstance.api.getMovieById(elem.id.toString())
-
-                // Запрос информации о фильме
-                call.enqueue(object : Callback<MovieResponse> {
-                    override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
-                        if (response.isSuccessful) {
-                            if (callStack.isEmpty()) {
-                                // Если стек пустой, добавляем первый фильм из базы данных
-                                callStack = response.body()?.docs?.toMutableList()!!
-
-                                // Инициализация адаптера и привязка его к RecyclerView
-                                movieAdapter = MovieAdapter(callStack, this@MovieListActivity)
-                                binding.recycle.adapter = movieAdapter
-
-                                // Установка LayoutManager в зависимости от ориентации экрана и вращения
-                                if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) {
-                                    if (config.orientation == Configuration.ORIENTATION_PORTRAIT) {
-                                        binding.recycle.layoutManager = GridLayoutManager(this@MovieListActivity, 3)
-                                    }
-                                } else if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) {
-                                    if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                                        binding.recycle.layoutManager = GridLayoutManager(this@MovieListActivity, 5)
-                                    }
-                                }
-
-                            } else {
-                                // Если стек не пустой, дополняем его новым фильмом (Это необходимо для формирования подходящего под адаптер типа данных)
-                                response.body()?.docs?.get(0)?.let { callStack.add(0, it) }
-
-                                // Обновление адаптера и LayoutManager
-                                movieAdapter = MovieAdapter(callStack, this@MovieListActivity)
-                                binding.recycle.adapter = movieAdapter
-
-                                if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) {
-                                    if (config.orientation == Configuration.ORIENTATION_PORTRAIT) {
-                                        binding.recycle.layoutManager = GridLayoutManager(this@MovieListActivity, 3)
-                                    }
-                                } else if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) {
-                                    if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                                        binding.recycle.layoutManager = GridLayoutManager(this@MovieListActivity, 5)
-                                    }
-                                }
-                            }
-
-                        } else {
-                            Toast.makeText(applicationContext, "Something went wrong", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-
-                    override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
-                        Toast.makeText(applicationContext, "Something went wrong1", Toast.LENGTH_SHORT).show()
-                    }
-                })
-            }
-        }
-
-        // Инициализация и запуск слушателя событий ориентации экрана
-        orientationEventListener = object : OrientationEventListener(this) {
-            override fun onOrientationChanged(orientation: Int) {
-                // Обработка изменения ориентации экрана
-                if (orientation == ORIENTATION_UNKNOWN) {
-                    return
-                }
-
-                val rotation = windowManager.defaultDisplay.rotation
-                val newOrientation = when (rotation) {
-                    Surface.ROTATION_0 -> Configuration.ORIENTATION_PORTRAIT
-                    Surface.ROTATION_90 -> Configuration.ORIENTATION_LANDSCAPE
-                    Surface.ROTATION_180 -> Configuration.ORIENTATION_PORTRAIT
-                    Surface.ROTATION_270 -> Configuration.ORIENTATION_LANDSCAPE
-                    else -> Configuration.ORIENTATION_UNDEFINED
-                }
-
-                // Выполнение действий при изменении ориентации экрана
-                handleOrientationChange(newOrientation)
-            }
-        }
-
-        // Включение слушателя событий ориентации экрана
-        orientationEventListener.enable()
-    }
-
-    // Обработка изменения ориентации экрана (при портретной ориентации будет 3 колонки списка а при ландшафтной 5)
-    private fun handleOrientationChange(orientation: Int) {
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            binding.recycle.layoutManager = GridLayoutManager(this@MovieListActivity, 3)
-        } else {
-            binding.recycle.layoutManager = GridLayoutManager(this@MovieListActivity, 5)
-        }
     }
 }
+
+//        GlobalScope.launch {
+//            // Получение всех фильмов из базы данных
+//            val movies = movieDao.getAllMovies()
+//
+////            movies.forEach { elem ->
+//                val call = MovieApiInstance.api.getMovieById(elem.id.toString())
+//
+//                // Запрос информации о фильме
+//                call.enqueue(object : Callback<MovieResponse> {
+//                    override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
+//                        if (response.isSuccessful) {
+//                            if (callStack.isEmpty()) {
+//                                // Если стек пустой, добавляем первый фильм из базы данных
+//                                callStack = response.body()?.docs?.toMutableList()!!
+//
+//                                // Инициализация адаптера и привязка его к RecyclerView
+////                                movieAdapter = MovieAdapter(callStack, this@MovieListActivity)
+//                                binding.recycle.adapter = movieAdapter
+//
+//                                // Установка LayoutManager в зависимости от ориентации экрана и вращения
+//                                if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) {
+//                                    if (config.orientation == Configuration.ORIENTATION_PORTRAIT) {
+//                                        binding.recycle.layoutManager = GridLayoutManager(this@MovieListActivity, 3)
+//                                    }
+//                                } else if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) {
+//                                    if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//                                        binding.recycle.layoutManager = GridLayoutManager(this@MovieListActivity, 5)
+//                                    }
+//                                }
+//
+//                            } else {
+//                                // Если стек не пустой, дополняем его новым фильмом (Это необходимо для формирования подходящего под адаптер типа данных)
+//                                response.body()?.docs?.get(0)?.let { callStack.add(0, it) }
+//
+//                                // Обновление адаптера и LayoutManager
+////                                movieAdapter = MovieAdapter(callStack, this@MovieListActivity)
+//                                binding.recycle.adapter = movieAdapter
+//
+//                                if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) {
+//                                    if (config.orientation == Configuration.ORIENTATION_PORTRAIT) {
+//                                        binding.recycle.layoutManager = GridLayoutManager(this@MovieListActivity, 3)
+//                                    }
+//                                } else if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) {
+//                                    if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//                                        binding.recycle.layoutManager = GridLayoutManager(this@MovieListActivity, 5)
+//                                    }
+//                                }
+//                            }
+//
+//                        } else {
+//                            Toast.makeText(applicationContext, "Something went wrong", Toast.LENGTH_SHORT).show()
+//                        }
+//                    }
+//
+//                    override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
+//                        Toast.makeText(applicationContext, "Something went wrong1", Toast.LENGTH_SHORT).show()
+//                    }
+//                })
+//            }
+//        }
+//
+//        // Инициализация и запуск слушателя событий ориентации экрана
+//        orientationEventListener = object : OrientationEventListener(this) {
+//            override fun onOrientationChanged(orientation: Int) {
+//                // Обработка изменения ориентации экрана
+//                if (orientation == ORIENTATION_UNKNOWN) {
+//                    return
+//                }
+//
+//                val rotation = windowManager.defaultDisplay.rotation
+//                val newOrientation = when (rotation) {
+//                    Surface.ROTATION_0 -> Configuration.ORIENTATION_PORTRAIT
+//                    Surface.ROTATION_90 -> Configuration.ORIENTATION_LANDSCAPE
+//                    Surface.ROTATION_180 -> Configuration.ORIENTATION_PORTRAIT
+//                    Surface.ROTATION_270 -> Configuration.ORIENTATION_LANDSCAPE
+//                    else -> Configuration.ORIENTATION_UNDEFINED
+//                }
+//
+//                // Выполнение действий при изменении ориентации экрана
+////                handleOrientationChange(newOrientation)
+//            }
+//        }
+//
+//        // Включение слушателя событий ориентации экрана
+//        orientationEventListener.enable()
+//    }
+
+    // Обработка изменения ориентации экрана (при портретной ориентации будет 3 колонки списка а при ландшафтной 5)
+//    private fun handleOrientationChange(orientation: Int) {
+//        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//            binding.recycle.layoutManager = GridLayoutManager(this@MovieListActivity, 3)
+//        } else {
+//            binding.recycle.layoutManager = GridLayoutManager(this@MovieListActivity, 5)
+//        }
+//    }
+//}

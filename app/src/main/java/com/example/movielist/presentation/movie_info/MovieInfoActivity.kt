@@ -33,7 +33,7 @@ class MovieInfoActivity : AppCompatActivity() {
 
         // Получение информации о фильме по его идентификатору
         val call = service.getMovieById(id.toString())
-        fetchMovie(call)
+//        fetchMovie(call)
 
         // Обработчик кнопки "Добавить в список планируемых фильмов"
         binding.addToWatchList.setOnClickListener {

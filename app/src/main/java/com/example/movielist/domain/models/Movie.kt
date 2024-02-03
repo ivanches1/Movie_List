@@ -22,28 +22,8 @@ data class Movie(
     val enName: String?,
     val names: List<Name>,
     val shortDescription: String,
-    val logo: String,
+    val logo: String?,
 ) {
-    companion object {
-        fun fromApi(apiMovie: ApiMovie): Movie {
-            return Movie(
-                rating = Rating.fromApi(apiMovie.rating),
-                movieLength = apiMovie.movieLength,
-                id = apiMovie.id,
-                type = apiMovie.type,
-                name = apiMovie.name,
-                description = apiMovie.description,
-                year = apiMovie.year,
-                poster = apiMovie.poster.url,
-                genres = apiMovie.genres.map { it.name },
-                alternativeName = apiMovie.alternativeName,
-                enName = apiMovie.enName,
-                names = apiMovie.names.map { Name.fromApi(it) },
-                shortDescription = apiMovie.shortDescription,
-                logo = apiMovie.logo.url,
-            )
-        }
-    }
 }
 
 data class Name(

@@ -6,9 +6,9 @@ import retrofit2.Call
 
 interface ApiRepository {
 
-    fun getMovies(): List<Movie>
+    suspend fun getMovies(): List<Movie>
 
-    fun searchMovies(query: String): List<Movie>
+    suspend fun searchMovies(query: String): List<Movie>
 
-    fun getMovieById(query: String): List<Movie>
+    suspend fun getMovieById(query: String): List<Movie>
 }
