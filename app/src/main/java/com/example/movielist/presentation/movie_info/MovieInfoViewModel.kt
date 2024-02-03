@@ -41,10 +41,12 @@ class MovieInfoViewModel @Inject constructor(
 
     fun addToFavorite(id: Int) {
         viewModelScope.launch {
-            try {
-                addToFavoriteUseCase.execute(id)
-            } catch (e: Exception) {
-                e.printStackTrace()
+            withContext(Dispatchers.IO) {
+                try {
+                    addToFavoriteUseCase.execute(id)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
         }
     }

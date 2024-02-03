@@ -47,15 +47,17 @@ class MainViewModel @Inject constructor(
 
     fun deleteAllMovies() {
         viewModelScope.launch {
-            try {
-                deleteAllFavoriteMoviesUseCase.execute()
-                fetchMovies()
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(context, "Все фильмы успешно удалены", Toast.LENGTH_LONG).show()
+            withContext(Dispatchers.IO) {
+                try {
+                    deleteAllFavoriteMoviesUseCase.execute()
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(context, "Все фильмы успешно удалены", Toast.LENGTH_LONG).show()
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
-            } catch (e: Exception) {
-                e.printStackTrace()
             }
+
         }
     }
 
